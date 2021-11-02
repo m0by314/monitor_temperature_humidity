@@ -11,7 +11,7 @@ Tool to monitor temperature and humidity with Adafruit IO dashboard and an ESP32
 
 ## How it works
 
-The tool measures temperature and humidity every 2 hours.
+The tool measures temperature and humidity every 2 hours by default (the time between each measurement can be modified in the config.h file).
 The data is stored on an Adafruit IO feed to be visualized in a dashboard. 
 
 Between each measurement, the ESP goes into deep sleep mode.  

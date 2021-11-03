@@ -81,3 +81,5 @@ void setup() {
   delay(5000); // 5s
   esp_deep_sleep_start();
 }
+
+void loop() {}

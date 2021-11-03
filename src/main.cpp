@@ -14,10 +14,10 @@ AdafruitIO_Feed *temperature = io.feed(IO_FEED_TEMP); // Set up the feed for tem
 
 
 void setup() {
- 
   Serial.begin(115200);
 
-  esp_sleep_enable_timer_wakeup(TIME_TO_SECOND * uS_TO_S_FACTOR);  // Timer for the wakeup of the ESP
+  // Timer for the wakeup of the ESP
+  esp_sleep_enable_timer_wakeup(TIME_TO_SECOND * uS_TO_S_FACTOR);
 
   // connect to io.adafruit.com
   Serial.print("Connecting to Adafruit IO");
@@ -47,11 +47,7 @@ void setup() {
   dht.temperature().getSensor(&sensor);
   dht.humidity().getSensor(&sensor);
   
-  delay(2000); 
-}
- 
-void loop() {
-
+  // Initialize sensor event 
   sensors_event_t event;
 
   // Get temperature event and print its value.
@@ -80,10 +76,8 @@ void loop() {
   // Send data to the feed.
   humidity->save(event.relative_humidity);
  
-
+  // Start deep sleep
   Serial.println("Going to sleep ...\n");
-  
-  delay(2000);
-
+  delay(5000); // 5s
   esp_deep_sleep_start();
 }

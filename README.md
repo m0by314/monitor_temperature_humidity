@@ -1,5 +1,5 @@
-# Monitor temperature and humidity with an ESP32
-Tool to monitor temperature and humidity with Adafruit IO dashboard and an ESP32 with DHT22 sensor.
+# Monitor temperature and humidity with Adafruit IO
+Monitor temperature and humidity with Adafruit IO dashboard and an ESP32 with DHT22 sensor.
 
 ## Summary
  - [How it works](#How-it-works)

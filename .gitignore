@@ -7,4 +7,4 @@
 .DS_Store
 
 // Sensitive data
-config.h
+arduino_secret.h

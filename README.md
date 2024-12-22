@@ -1,40 +1,42 @@
-# Monitor temperature and humidity with Adafruit IO
-Monitor temperature and humidity with Adafruit IO dashboard and an ESP32 with DHT22 sensor.
+# Monitoring temperature and humidity with esp32 and Thinger.io
 
 ## Summary
  - [How it works](#How-it-works)
- - [Connect the DHT sensor](#Connect-the-DHT-sensor)
- - [Create Adafruit IO dashboard](#Create-Adafruit-IO-Dashboard)
+ - [Connection](#Connection)
+ - [Battery charge calculation](#Battery-charge-calculation)
+ - [Thinger.io ](#Thinger.io)
  - [Setup](#Setup)
  - [Built with](#Built-with)
 
 
 ## How it works
 
-The tool measures temperature and humidity every 2 hours by default (the time between each measurement can be modified in the config.h file).
-The data is stored on an Adafruit IO feed to be visualized in a dashboard. 
+The tool measures temperature and humidity every 2 hours by default. 
+Data is stored on a Thinger.io data bucket and visualized from a dashboard.
+An endpoint is used to send an e-mail when the battery is low 
 
 Between each measurement, the ESP goes into deep sleep mode.  
 
-## Connect the DHT sensor
+## Connection
 
-![image](static/img/dht.png)
+The dht22 is connected to pin 13 of the ESP. 
+The battery holder is connected to pin 32 to calculate the battery charge.
 
-## Create Adafruit IO Dashboard
+## Battery charge calculation
+A cr123 lithium battery is used. 
+The maximum charge threshold is set at 3.3V and the discharge threshold at 2.9V. 
+The thresholds are converted to digital values for comparison with those obtained from the adc.
+The value read from the adc is converted to a percentage using the map() function.
+If the percentage is less than 20%, the endpoint is triggered.
 
-* See this link for create a feed: 
-https://learn.adafruit.com/adafruit-io-basics-feeds/creating-a-feed
+## Thinger.io
 
-* See this link for create a feed: (create a feed for temperature and another for humidity)
-https://learn.adafruit.com/adafruit-io-basics-dashboards/creating-a-dashboard
-
-* Get your Adafruit Key:
-Click on the tab "My Key"
-![image](static/img/adafruit_key.png)
-
-* Get your Adafruit feed key:
-Go to the feeds page to see the key of your feed
-![image](static/img/adafruit_feed_key.png)
+The following elements must be created on Thinger.io:  
+* Device (define a device credential, which is only visible when the device is created).
+* Data bucket ( select “From Device Write Call” for the data source) 
+* Endpoint ( select “Email” for the endpoint type. Add custom placeholders in the destination address, reply to, subject, or email body from the endpoint call data by using {{field}} or {{}} ) 
+*ESP-supplied fields: “temperature”, “humidity”, “battery” , “device_id”.*
+* Dashboards to view data the way you like it 
 
 
 ## Setup 
@@ -43,20 +45,24 @@ Go to the feeds page to see the key of your feed
 * First copy the template:  
 `cp config_template.h config.h`
 
-* Configure the following variables with your credentials:  
+* Configure the following variables with your secrets:  
 ```
-/* WIFI Setting */
-#define WIFI_SSID "YOUR_WIFI_SSID"     /* Replace with your wifi ssid. */
-#define WIFI_PWD "YOUR_WIFI_PASSWORD"  /* Replace with your wifi password */
+/* ------- Thinger.io ------- */
+#define THINGER_USERNAME "your Thinger.io username"
+#define THINGER_DEVICE_ID "your device id"
+#define THINGER_DEVICE_CREDENTIAL "your device credential"
 
-/* Adafruit IO settings */
-#define IO_USERNAME "YOUR ADAFRUIT USERNAME" /* Replace with your adafruit username. */
-#define IO_KEY "YOUR ADAFRUIT KEY"           /* Replace with your adafruit key.      */
-#define IO_FEED_HUMIDITY "HUMIDITY FEED NAME"    /* Replace with your adafruit humidity feed name. */
-#define IO_FEED_TEMP "TEMPERATURE FEED NAME"     /* Replace with your adafruit humidity feed name. */
+#define THINGER_BUCKET_ID "your bucket id"
+#define THINGER_ENDPOINT_IDENTIFIER "your endpoint identifier"
+
+/* ------- WIFI ------- */
+#define WIFI_SSID "your wifi name"
+#define WIFI_PASSWORD "your wifi password"
 ```
 
 ## Built with
 
-* ESP32 NodeMCU Module WLAN WiFi Development Board with CP2102 
+* Kit AZ-Delivery Dev Kit C  
 * Sensor DHT22
+* cr123 lithium battery 
+* Battery holder cr123

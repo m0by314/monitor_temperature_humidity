@@ -43,7 +43,7 @@ The following elements must be created on Thinger.io:
 
 
 * First copy the template:  
-`cp config_template.h config.h`
+`cp arduino_secret.h.template arduino_secret.h`
 
 * Configure the following variables with your secrets:  
 ```

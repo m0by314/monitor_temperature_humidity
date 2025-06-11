@@ -7,7 +7,7 @@
 #include "../arduino_secret.h"
 
 /* Sleep Time */
-#define HOUR_TO_SLEEP 2ULL                        /* Sleep time between each measurement  */
+#define HOUR_TO_SLEEP 1ULL                        /* Sleep time between each measurement  */
 #define uS_TO_S_FACTOR 1000000                    /* Conversion factor for micro seconds to seconds */
 #define TIME_TO_SLEEP (HOUR_TO_SLEEP * 60 * 60)   /* Time ESP32 will go to sleep (in seconds) */
 
@@ -75,11 +75,7 @@ void setup() {
     in["device_id"] = THINGER_DEVICE_ID;
   };
 
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);  // Timer for the wakeup of the ESP
-  
-}
-
-void loop() {
+  // Write Data
   thing.handle();
   thing.write_bucket(THINGER_BUCKET_ID, "data");
   
@@ -87,8 +83,14 @@ void loop() {
     thing.call_endpoint(THINGER_ENDPOINT_IDENTIFIER, thing["data"]);
     endpointUpperFlag=0;
   }
+  thing.stop();
 
   Serial.println(battery_percent);
   delay(500);
+  
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);  // Timer for the wakeup of the ESP
   esp_deep_sleep_start();
+  
 }
+
+void loop() {}

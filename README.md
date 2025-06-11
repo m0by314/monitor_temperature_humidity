@@ -11,7 +11,7 @@
 
 ## How it works
 
-The tool measures temperature and humidity every 2 hours by default. 
+The tool measures temperature and humidity every 1 hours by default. 
 Data is stored on a Thinger.io data bucket and visualized from a dashboard.
 An endpoint is used to send an e-mail when the battery is low 
 
